@@ -5,6 +5,7 @@ import { ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight, FileText, FolderIc
 import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
 import TemplateSelector from "../components/TemplateSelector";
+import ColorPicker from "../components/ColorPicker";
 
 const ResumeBuilder = () => {
 
@@ -73,6 +74,7 @@ const ResumeBuilder = () => {
                                     <TemplateSelector selectedTemplate={resumedata.template} onChange={(template) => 
                                         setresumedata((prev) => ({...prev,template}))
                                     }/>
+                                    <ColorPicker selectedColor={resumedata.accent_color} onChange={(color) => setresumedata(prev => ({...prev,accent_color:color}))}/>
                                 </div>
                                 <div className="flex items-center">
                                     <button onClick={() => setActiveSectionIndex((prevIndex) => Math.max(prevIndex - 1,0))} className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all ${activeSectionIndex === 0 && 'opacity-50'}`} disabled={activeSectionIndex === 0}>
