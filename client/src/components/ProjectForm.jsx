@@ -1,4 +1,4 @@
-import { Briefcase, Plus, Sparkles, Trash2 } from "lucide-react"
+import { Folder, Plus, Sparkles, Trash2 } from "lucide-react"
 
 const ProjectForm = ({data,onChange}) => {
 
@@ -36,7 +36,7 @@ const ProjectForm = ({data,onChange}) => {
             </div>
             {data.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                    <Briefcase className="w-12 h-12 mx-auto mb-3 text-gray-300"/>
+                    <Folder className="w-12 h-12 mx-auto mb-3 text-gray-300"/>
                     <p>No projects added yet.</p>
                     <p className="text-sm">Click "Add Projects" to get started</p>
                 </div>
@@ -51,7 +51,7 @@ const ProjectForm = ({data,onChange}) => {
                                     <Trash2 className="size-4" />
                                 </button>
                             </div>
-                            <div className="grid md:grid-cols-2 gap-3">
+                            <div className="grid gap-2">
                                 <input value={project.name || ""} onChange={(e) => updateProject(index,"name",e.target.value)} type="text" placeholder="Name of the Project" className="px-3 py-2 text-sm rounded-lg"/> 
                                 <input value={project.type || ""} onChange={(e) => updateProject(index,"type",e.target.value)} type="text" placeholder="type (eg. Web Application, Frontend UI Kit)" className="px-3 py-2 text-sm rounded-lg"/> 
                             </div>
