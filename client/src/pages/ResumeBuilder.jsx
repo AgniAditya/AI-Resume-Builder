@@ -107,6 +107,9 @@ const ResumeBuilder = () => {
                                 {activeSections.id === "projects" && (
                                     <ProjectForm data={resumedata.project} onChange={(data) => setresumedata((prev) => ({...prev,project: data}))}/>
                                 )}
+                                {activeSections.id === "skills" && (
+                                    <SkillForm data={resumedata.skills} onChange={(data) => setresumedata((prev) => ({...prev,skills: data}))}/>
+                                )}
                             </div>
                         </div>
                     </div>
