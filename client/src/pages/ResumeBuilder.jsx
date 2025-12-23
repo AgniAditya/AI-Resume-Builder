@@ -10,6 +10,7 @@ import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm";
 import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
+import SkillForm from "../components/SkillForm";
 
 const ResumeBuilder = () => {
 
@@ -70,7 +71,7 @@ const ResumeBuilder = () => {
                         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
                             {/* progess bar using activeSectionIndex */}
                             <hr className="absolute top-0 left-0 right-0 border-2 border-gray-200"/>
-                            <hr className="absolute top-0 left-0 right-0 -2 h-1 bg-gradient-to-r from-green-500 to green-600 border-none transition-all duration-2000" style={{width: `${activeSectionIndex * 100 / (section.length - 1)}%`}}/>
+                            <hr className="absolute top-0 left-0 right-0 h-1 bg-green-600 border-none transition-all duration-2000" style={{width: `${activeSectionIndex * 100 / (section.length - 1)}%`}}/>
 
                             {/* Section navigation */}
                             <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
