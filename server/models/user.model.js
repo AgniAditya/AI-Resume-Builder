@@ -15,13 +15,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    resumes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "resume"
-        }
-    ]
+    }
 },{timestamps: true})
 
 userSchema.pre("save", function (next) {
