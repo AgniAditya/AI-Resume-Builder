@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getUserById, loginUser, registerUser } from '../controllers/user.controller';
+import { getUserById, getUserResumes, loginUser, registerUser } from '../controllers/user.controller';
 import { protect } from '../middlewares/auth.middleware';
 
 const userRouter = Router();
@@ -7,5 +7,6 @@ const userRouter = Router();
 userRouter.post('/register',registerUser)
 userRouter.post('/login',loginUser)
 userRouter.get('/data',protect,getUserById)
+userRouter.get('/resumes',protect,getUserResumes)
 
 export default userRouter
