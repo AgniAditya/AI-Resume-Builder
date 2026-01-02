@@ -68,7 +68,24 @@ const loginUser = async (req,res) => {
     }
 }
 
+//GET: api/user/data
+const getUserById = async (req,res) => {
+    try {
+        const userId = req.userId
+        const isUserFound = await User.findById(userId)
+        if(!isUserFound) 
+            return res.status(404).json({message: "User not found"});
+        const user = await User.findById(isUserFound._id).select("-password");
+        return res.status(200).json({
+            user: user
+        })
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+    }
+}
+
 export {
     registerUser,
-    loginUser
+    loginUser,
+    getUserById,
 }
