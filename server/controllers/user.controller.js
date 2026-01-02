@@ -1,3 +1,4 @@
+import { Resume } from "../models/resume.model";
 import { User } from "../models/user.model";
 import jwt from 'jsonwebtoken'
 
@@ -84,8 +85,20 @@ const getUserById = async (req,res) => {
     }
 }
 
+//GET: api/user/resumes
+const getUserResumes = async (req,res) => {
+    try {
+        const userId = req.userId
+        const resumes = await Resume.find({userId})
+        return res.status(200).json({resumes})
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+    }
+}
+
 export {
     registerUser,
     loginUser,
     getUserById,
+    getUserResumes,
 }
