@@ -1,5 +1,5 @@
-import { Resume } from "../models/resume.model";
-import { User } from "../models/user.model";
+import { Resume } from "../models/resume.model.js";
+import { User } from "../models/user.model.js";
 import jwt from 'jsonwebtoken'
 
 const generateToken = async (userId) => {
