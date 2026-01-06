@@ -14,7 +14,7 @@ const registerUser = async (req,res) => {
             return res.status(400).json({message: 'missing required fields.'});
 
         const user = await User.findOne({email})
-        if(!user){
+        if(user){
             return res.status(400).json({message: "User already exist."})
         }
 
@@ -92,6 +92,7 @@ const getUserResumes = async (req,res) => {
         const resumes = await Resume.find({userId})
         return res.status(200).json({resumes})
     } catch (error) {
+        console.log(error)
         return res.status(400).json({message: error.message})
     }
 }

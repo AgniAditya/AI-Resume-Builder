@@ -59,102 +59,107 @@ const uploadResume = async (req,res) => {
                     type: 'object',
                     properties: {
                         professional_summary: {
-        type: String,
-        default: ""
+                            type: String,
+                            default: ""
                         },
-                        skills: [
-                            {
-                                type: String
+                        skills: {
+                            type: "array",
+                            items: {
+                                type: "string"
                             }
-                        ],
+                        },
                         personal_info: {
-                            full_name: {
-                                type: String,
-                                default: ''
-                            },
-                            email: {
-                                type: String,
-                                default: ''
-                            },
-                            phone: {
-                                type: String,
-                                default: ''
-                            },
-                            location: {
-                                type: String,
-                                default: ''
-                            },
-                            linkedin: {
-                                type: String,
-                                default: ''
-                            },
-                            website: {
-                                type: String,
-                                default: ''
-                            },
-                            profession: {
-                                type: String,
-                                default: ''
-                            },
-                            image: {
-                                type: String,
-                                default: ''
-                            }
-                        },
-                        experience: [
-                            {
-                                company: {
+                            type: "object",
+                            properties: {
+                                full_name: {
                                     type: String,
+                                    default: ''
                                 },
-                                position: {
+                                email: {
                                     type: String,
+                                    default: ''
                                 },
-                                start_date: {
+                                phone: {
                                     type: String,
+                                    default: ''
                                 },
-                                end_date: {
+                                location: {
                                     type: String,
+                                    default: ''
                                 },
-                                description: {
+                                linkedin: {
                                     type: String,
+                                    default: ''
                                 },
-                                is_current: {
-                                    type: Boolean,
+                                website: {
+                                    type: String,
+                                    default: ''
                                 },
-                            }
-                        ],
-                        project: [
-                            {
-                                name: {
-                                    type: String
+                                profession: {
+                                    type: String,
+                                    default: ''
                                 },
-                                type: {
-                                    type: String
-                                },
-                                description: {
-                                    type: String
+                                image: {
+                                    type: String,
+                                    default: ''
                                 }
                             }
-                        ],
-                        education: [
-                            {
-                                institution: {
-                                    type: String
-                                },
-                                degree: {
-                                    type: String
-                                },
-                                field: {
-                                    type: String,
-                                },
-                                graduation_date: {
-                                    type: String,
-                                },
-                                gpa: {
-                                    type: String,
-                                },
+                        },
+                        experience: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    company: { type: "string" },
+                                    position: { type: "string" },
+                                    start_date: { type: "string" },
+                                    end_date: { type: "string" },
+                                    description: { type: "string" },
+                                    is_current: { type: "boolean" }
+                                }
                             }
-                        ]
+                        },
+                        project: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    name: {
+                                        type: String
+                                    },
+                                    type: {
+                                        type: String
+                                    },
+                                    description: {
+                                        type: String
+                                    }
+                                }
+                            }
+                        },
+                        education: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+
+                                    institution: {
+                                        type: String
+                                    },
+                                    degree: {
+                                        type: String
+                                    },
+                                    field: {
+                                        type: String,
+                                    },
+                                    graduation_date: {
+                                        type: String,
+                                    },
+                                    gpa: {
+                                        type: String,
+                                    },
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -165,6 +170,7 @@ const uploadResume = async (req,res) => {
 
         return res.status(200).json({resumeId: newResume._id})
     } catch (error) {
+        console.log(error)
         return res.status(400).json({message: error.message})
     }
 }

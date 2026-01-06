@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { data, Link, useParams } from 'react-router-dom'
-import { dummyResumeData } from "../assets/assets";
+import { Link, useParams } from 'react-router-dom'
 import { ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, EyeOff, FileText, FolderIcon, GraduationCap, Share2Icon, Sparkles, User } from 'lucide-react'
 import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
@@ -11,11 +10,15 @@ import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
 import SkillForm from "../components/SkillForm";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const ResumeBuilder = () => {
 
     const { resumeId } = useParams()
-
+    const {token} = useSelector(state => state.auth)
+    
     const [resumedata,setresumedata] = useState({
         _id: '',
         title: '',
@@ -45,36 +48,78 @@ const ResumeBuilder = () => {
     const activeSections = section[activeSectionIndex]
 
     const loadExistingResume = async () => {
-        const resume = dummyResumeData.find(resume => resume._id === resumeId)
-        if(resume){
-            setresumedata(resume)
-            document.title = resume.title
+        try {
+            const {data} = await api.get(`/api/resumes/get/${resumeId}`,{headers: {Authorization: token}})
+            if(data.resume){
+                setresumedata(data.resume)
+                document.title = data.resume.title
+            }
+        } catch (error) {
+            console.log(error.message)
         }
     }
 
     useEffect(() => {
-        loadExistingResume()
-    },[])
+        if(resumeId){
+            loadExistingResume()
+        }
+    },[resumeId])
 
     const changeResumeVisibility = async () => {
-        setresumedata({...resumedata,public: !resumedata.public})
+        try {
+            const formData = new FormData()
+            formData.append('resumeId',resumeId)
+            formData.append("resumeData",JSON.stringify({public: !resumedata.public}))
+            
+            const {data} = await api.put(`/api/resumes/update`,formData,{headers: {Authorization: token}})
+            setresumedata({...resumedata,public: !resumedata.public})
+            toast.success(data.message)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleShare = () => {
         const frontendUrl = window.location.href.split('/app/')[0]
         const resumeUrl = frontendUrl + '/view/' + resumeId
-
+        
         if(navigator.share){
             navigator.share({url: resumeUrl,text: "My Resume",})
         }
         else {
             alert('Share not supported on this browser.')
         }
-
+        
     }
 
     const downloadResume = () => {
         window.print()
+    }
+    
+    const saveResume = async () => {
+        try {
+            let updatedResumeData = structuredClone(resumedata)
+            //remove image from updatedResumeData
+            if(typeof resumedata.personal_info.image === 'object'){
+                delete updatedResumeData.personal_info.image
+            }
+            
+            const formData = new FormData()
+            formData.append('resumeData',JSON.stringify(updatedResumeData))
+            formData.append('resumeId',resumeId)
+            if(removeBackground){
+                formData.append('removeBackground',"yes")
+            }
+            if(typeof resumedata.personal_info.image === 'object'){
+                formData.append("image",resumedata.personal_info.image)
+            }
+            const {data} = await api.put('/api/resumes/update',formData,{headers: {Authorization: token}})
+            
+            setresumedata(data.updatedResume)
+            toast.success(data.message)
+        } catch (error) {
+            console.error("Error saving resume: ",error)
+        }
     }
 
     return (
@@ -97,8 +142,7 @@ const ResumeBuilder = () => {
                             {/* Section navigation */}
                             <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
                                 <div className="flex items-center gap-2">
-                                    <TemplateSelector selectedTemplate={resumedata.template} onChange={(template) => 
-                                        setresumedata((prev) => ({...prev,template}))
+                                    <TemplateSelector selectedTemplate={resumedata.template} onChange={(template) => setresumedata((prev) => ({...prev,template}))
                                     }/>
                                     <ColorPicker selectedColor={resumedata.accent_color} onChange={(color) => setresumedata(prev => ({...prev,accent_color:color}))}/>
                                 </div>
@@ -133,7 +177,7 @@ const ResumeBuilder = () => {
                                     <SkillForm data={resumedata.skills} onChange={(data) => setresumedata((prev) => ({...prev,skills: data}))}/>
                                 )}
                             </div>
-                            <button className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">Save Changes</button>
+                            <button onClick={() => {toast.promise(saveResume,{loading: 'Saving...'})}} className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">Save Changes</button>
                         </div>
                     </div>
 
