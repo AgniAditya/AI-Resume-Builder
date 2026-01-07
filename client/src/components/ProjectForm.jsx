@@ -1,6 +1,13 @@
-import { Folder, Plus, Sparkles, Trash2 } from "lucide-react"
+import { Folder, Loader2, Plus, Sparkles, Trash2 } from "lucide-react"
+import { useState } from "react"
+import { useSelector } from "react-redux"
+import api from "../configs/api"
+import toast from "react-hot-toast"
 
 const ProjectForm = ({data,onChange}) => {
+
+    const {token} = useSelector(state => state.auth)
+    const [generatingIndex,setGeneratingIndex] = useState(-1)
 
     const addProject = () => {
         const newPorject = {
@@ -20,6 +27,20 @@ const ProjectForm = ({data,onChange}) => {
         const updated = [...data]
         updated[index] = {...updated[index],[field]: value}
         onChange(updated)
+    }
+
+    const generateDescription = async (index) => {
+        setGeneratingIndex(index)
+        const project = data[index]
+        const prompt = `enchane this project description ${project.description} and the detials of it ${project.name}, ${project.type}`
+        try {
+            const {data} = await api.post('/api/ai/enhance-project-desc',{userContent: prompt},{headers: {Authorization: token}})
+            updateProject(index,"description",data.enhanceContent)
+        } catch (error) {
+            toast.error(error.message)
+        } finally{
+            setGeneratingIndex(-1)
+        }
     }
 
     return (
@@ -59,8 +80,12 @@ const ProjectForm = ({data,onChange}) => {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                     <label className="text-sm font-medium text-gray-700">Project description</label>
-                                    <button className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50">
-                                        <Sparkles className="w-3 h-3"/>
+                                    <button disabled={generatingIndex === index || !project.name || !project.type} onClick={() => generateDescription(index)} className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50">
+                                        {generatingIndex === index ? (
+                                            <Loader2 className="w-3 h-3 animate-spin"/>
+                                        ) : (
+                                            <Sparkles className="w-3 h-3"/>
+                                        )}
                                         Enchance with AI
                                     </button>
                                 </div>
