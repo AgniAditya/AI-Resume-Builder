@@ -42,6 +42,26 @@ const enhanceJobDescription = async (req,res) => {
     }
 }
 
+//POST: /api/ai/enhance-project-desc
+const enhanceProjectDescription = async (req,res) => {
+    try {
+        const { userContent } = req.body;
+        if(!userContent.trim())
+            return res.status(400).json({message: "Missing required fields."})
+        const aiContent = await ai.models.generateContent({
+            model: process.env.GEMINI_MODEL,
+            contents: userContent,
+            config: {
+                systemInstruction: "You are an expert in resume writing. Your task is to enhance the project description of a resume. The project description should be 1-2 sentences also highlighting key responsibilities and achievements. Use action verbs and quantifiable results where possible. Make it ATS-friendly. and only return text no options or anything else."
+            }
+        })
+        const enhanceContent = aiContent.text
+        return res.status(200).json({enhanceContent})
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+    }
+}
+
 //POST: /api/ai/upload-resume
 const uploadResume = async (req,res) => {
     try {
@@ -178,5 +198,6 @@ const uploadResume = async (req,res) => {
 export {
     enhanceProfessionalSummary,
     enhanceJobDescription,
+    enhanceProjectDescription,
     uploadResume
 }
