@@ -91,7 +91,7 @@ const Dashboard = () => {
     return(
         <div>
             <div className="max-w-7x1 mx-auto px-4 py-8">
-                <p className="text-2x1 font-medium mb-6 bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent sm:hidden">Welcome, Dhurandhar</p>
+                <p className="text-2x1 font-medium mb-6 bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent sm:hidden">Hi, {user.name}</p>
                 <div className="flex gap-4">
                     <button onClick={() => setShowCreateResume(true)} className="w-full bg-white sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 text-slate-600 border border-dashed border-slate-300 group hover:border-indigo-500 hover:shadow-lg transition-all duration-300 cursor-pointer">
                         <PlusIcon className="size-11 transition-all duration-300 p-2.5 bg-gradient-to-br from-indigo-300 to-indigo-500 text-white rounded-full"/>
@@ -113,7 +113,7 @@ const Dashboard = () => {
                                 <p className="absolute bottom-1 text-[11px] text-slate-400 group-hover:text-slate-500 transition-all duration-300 px-2 text-center" style={{color : basecolor + '90'}}>
                                     Updated on {new Date(resume.updatedAt).toLocaleDateString()}
                                 </p>
-                                <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 group-hover:flex items-center hidden">
+                                <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 flex items-center">
                                     <TrashIcon className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" onClick={() => deleteResume(resume._id)}/>
                                     <PencilIcon className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" onClick={() => {setEditResumeId(resume._id); setTitle(resume.title)}}/>
                                 </div>

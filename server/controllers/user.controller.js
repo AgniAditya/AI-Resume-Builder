@@ -1,6 +1,7 @@
 import { Resume } from "../models/resume.model.js";
 import { User } from "../models/user.model.js";
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 
 const generateToken = async (userId) => {
     return jwt.sign({userId},process.env.JWT_TOKEN_SECERT,{expiresIn: process.env.JWT_TOKEN_EXPIRE})
@@ -53,7 +54,8 @@ const loginUser = async (req,res) => {
         if(!user)
             return res.status(400).json({message: 'user not found.'});
 
-        if(user.comparePassword(password))
+        const isPasswordCorrect = bcrypt.compareSync(password,user.password)
+        if(!isPasswordCorrect)
             return res.status(400).json({message: 'invalid password.'});
 
         const token = await generateToken(user._id);
